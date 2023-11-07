@@ -1,0 +1,45 @@
+.template 0
+###############################################################################
+# Copyright (c) 2011-2015 libbitcoin developers (see COPYING).
+#
+# GSL generate libbitcoin-explorer source files.
+#
+# This is a code generator built using the iMatix GSL code generation
+# language. See https://github.com/imatix/gsl for details.
+###############################################################################
+
+[global].trace = 0
+[gsl].ignorecase = 0
+
+gsl from "utilities.gsl"
+gsl from "primitives.gsl"
+
+# Global constants.
+config_option = "config"
+config_description = get_resource("BX_CONFIG_DESCRIPTION")
+help_description = get_resource("BX_HELP_DESCRIPTION")
+
+# Templates retain their natural extensions to enable editor association, and
+# are therefore prefixed with 'gsl' for sorting and template identification.
+
+# Use libbitcoin-build to generate Makefile.am from metadata and sources.
+#gsl from "templates/gsl.Makefile.am"
+
+gsl from "templates/gsl.command.hpp"
+gsl from "templates/gsl.commands.hpp"
+gsl from "templates/gsl.generated.hpp"
+gsl from "templates/gsl.generated.cpp"
+gsl from "templates/gsl.libbitcoin-explorer.vcxproj.filter"
+gsl from "templates/gsl.libbitcoin-explorer.vcxproj"
+
+gsl from "templates/data/gsl.bx"
+
+gsl from "templates/test/gsl.generated__broadcast.cpp"
+gsl from "templates/test/gsl.generated__find.cpp"
+gsl from "templates/test/gsl.generated__formerly.cpp"
+gsl from "templates/test/gsl.generated__symbol.cpp"
+gsl from "templates/test/gsl.libbitcoin-explorer-test.vcxproj.filter"
+gsl from "templates/test/gsl.libbitcoin-explorer-test.vcxproj"
+
+###############################################################################
+.endtemplate
