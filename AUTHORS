@@ -1,0 +1,32 @@
+Authors:
+   
+ * Eric Voskuil <evoskuil>
+ * Phillip Mienk <pmienk>
+ * Neill Miller <viasil>
+
+Credit to the SX developers for the original design and implementation:
+   
+ * Amir Taaki <genjix>
+   Development
+   amir@unsystem.net
+
+ * Santiago Mendez
+   Feedback, testing and improvements.
+
+ * Vitalik Buterin
+   Development
+   vitalik@bitcoinmagazine.com
+
+ * Pablo Castellano <pablo@anche.no>
+   Debian developer, build system work, and improving project quality.
+
+ * Andres Vargas <andres@opensrc.mx>
+   Dockerfile container
+
+ * Dr Washington Y. Sanchez <drwasho>
+   GUI design and development
+   washington.sanchez@gmail.com
+
+Special thanks to Andrew Day for the early SX inspiration.
+
+
