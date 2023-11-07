@@ -1,0 +1,130 @@
+.template 0
+###############################################################################
+# Copyright (c) 2011-2019 libbitcoin developers (see COPYING).
+#
+# GSL generate libbitcoin-explorer source files.
+# This file contains no localizable resources.
+#
+# This is a code generator built using the iMatix GSL code generation
+# language. See https://github.com/imatix/gsl for details.
+###############################################################################
+# Functions
+###############################################################################
+
+function global.first_char(value)
+    return string.substr(my.value, 0, 0)
+endfunction
+
+function global.if_else(antecedent, consequent, alternate)
+    return my.antecedent ?? my.consequent ? my.alternate
+endfunction
+
+function global.if_else_empty(antecedent, consequent)
+    return if_else(my.antecedent, my.consequent, "")
+endfunction
+
+function global.is_default(value, fallback)
+    return conv.number(my.value ? my.fallback) = my.fallback
+endfunction
+
+function global.is_empty(value)
+    return ((my.value ? "") = "")
+endfunction
+
+function global.is_raw_input(command)
+    define my.command = is_raw_input.command
+    return defined(my.command->argument(is_raw_type(argument.type) & \
+        is_xml_true(argument.stdin)))
+endfunction
+
+function global.is_raw_output(output)
+    return is_raw_type(output)
+endfunction
+
+function global.is_xml_true(value)
+    return ((my.value ? "false") = "true")
+endfunction
+
+function global.last_char(value)
+    define my.position = string.length(my.value)
+    define my.character = string.substr(my.value, my.position, my.position)
+    return my.character
+endfunction
+
+function global.pluralize(name, is_plural)
+    if (my.is_plural)
+        # BUGBUG: last_char doesn't work.
+        if (last_char(name) = "s")
+            return "$(my.name)es"
+        else
+            return "$(my.name)s"
+        endif
+    endif
+    return my.name
+endfunction
+
+function global.quote(value, is_quoted)
+    return if_else(my.is_quoted, '"$(my.value)"', my.value)
+endfunction
+
+function global.brace(value, is_braced)
+    return if_else(my.is_braced, "{ $(my.value) }", my.value)
+endfunction
+
+function global.get_resource(name)
+    return generate->resource->string(name = my.name).value
+endfunction
+
+function global.true()
+    return 0 = 0
+endfunction
+
+function global.vectored_type(type, is_vector)
+    return my.is_vector ?? "std::vector<$(my.type)>" ? my.type
+endfunction
+
+function global.value_semantic(is_file, is_option, type, required, unlimited, variable, fallback)
+    define my.defaulted = !is_empty(my.fallback)
+    define my.norm_type = normalize_type(my.is_option, my.is_file, my.type)
+    define my.quote_default = my.defaulted & is_quoted_type(my.norm_type)
+    define my.brace_default = my.defaulted & is_braced_type(my.norm_type)
+    define my.implicit_bool = my.is_option & is_bool_type(my.norm_type)
+    define my.norm_unlimited = my.unlimited & !my.is_file
+    define my.parameter = is_empty(my.variable) ?? "" ? "&$(my.variable)"
+    define my.binding = if_else_empty(!my.is_file, pluralize(my.parameter, my.norm_unlimited))
+    define my.quoted_value = quote(if_else_empty(my.defaulted, my.fallback), my.quote_default)
+    define my.default_value = brace(my.quoted_value, my.brace_default)
+    define my.expression = "value<$(vectored_type(my.norm_type, my.norm_unlimited))>($(my.binding))"
+    my.expression += if_else_empty(my.required, "->required()")
+    my.expression += if_else_empty(my.defaulted, "->default_value($(my.default_value))")
+    my.expression += if_else_empty(my.implicit_bool, "->zero_tokens()")
+    return my.expression
+endfunction
+
+function global.left_token(text)
+    define my.left = ""
+    regexp.match("^(.*)\\\..*$", my.text, my.left)
+    return my.left
+endfunction
+
+function global.right_token(text)
+    define my.right = ""
+    regexp.match("^.*\\\.(.*)$", my.text, my.right)
+    return my.right
+endfunction
+
+function global.get_option_default(option, generate)
+    define my.option = get_option_default.option
+    define my.generate = get_option_default.generate
+    if (defined(my.option.configuration) & !defined(my.option.default))
+        define my.section_name = left_token(my.option.configuration)
+        define my.setting_name = right_token(my.option.configuration)
+        define my.configuration = my.generate->configuration(section = my.section_name)
+        define my.setting = my.configuration->setting(name = my.setting_name)
+        return my.setting.default
+    else
+        return my.option.default
+    endif
+endfunction
+
+.endtemplate
